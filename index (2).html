@@ -26,16 +26,13 @@
     <pre id="resultsOutput" style="border: 1px solid #ccc; padding: 10px; background: #f9f9f9; white-space: pre-wrap;"></pre>
 
     <script>
-        // References to the DOM elements
+     
         const sentenceInput = document.getElementById('sentenceInput');
         const wordToFind = document.getElementById('wordToFind');
         const replacementWord = document.getElementById('replacementWord');
         const substringCheck = document.getElementById('substringCheck');
         const resultsOutput = document.getElementById('resultsOutput');
 
-        /**
-         * Takes inputs and performs the required text operations.
-         */
         function analyzeText() {
             // Get inputs
             const text = sentenceInput.value.trim();
@@ -48,23 +45,20 @@
                 return;
             }
 
-            // 1. Word Counting
-            // Split by whitespace and count non-empty results
             const count = text.split(/\s+/).filter(w => w.length > 0).length;
 
-            // 2. Word Replacement
+           
             let newText = text;
             if (find && replace) {
-                // Use RegExp for global (g) and case-insensitive (i) whole word (\b) matching
+               
                 const searchRegex = new RegExp(`\\b${find}\\b`, 'gi');
                 newText = text.replace(searchRegex, replace);
             }
 
-            // 3. Substring Presence Check
+      
             const isPresent = check && text.toLowerCase().includes(check.toLowerCase());
             const presence = check ? (isPresent ? 'PRESENT' : 'NOT PRESENT') : 'N/A';
             
-            // Display results using a template literal
             resultsOutput.innerHTML = `
 --- Analysis Results ---
 
@@ -85,3 +79,4 @@ Presence: ${presence}
     </script>
 </body>
 </html>
+
