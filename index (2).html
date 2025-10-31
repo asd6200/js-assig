@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Text Analysis</title>
+</head>
+<body>
+
+    <h1>Minimal Text Analysis Tool</h1>
+
+    <textarea id="sentenceInput" rows="3" style="width: 90%; margin-bottom: 10px;" 
+        placeholder="Enter your sentence here..."></textarea>
+    
+    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+        <input type="text" id="wordToFind" placeholder="Word to Find" style="flex: 1;">
+        <input type="text" id="replacementWord" placeholder="Replacement" style="flex: 1;">
+        <input type="text" id="substringCheck" placeholder="Substring to Check" style="flex: 1;">
+    </div>
+
+    <button onclick="analyzeText()" style="padding: 10px; width: 90%; background: #007bff; color: white; border: none; cursor: pointer;">
+        Analyze Text
+    </button>
+
+    <h2>Results</h2>
+    <pre id="resultsOutput" style="border: 1px solid #ccc; padding: 10px; background: #f9f9f9; white-space: pre-wrap;"></pre>
+
+    <script>
+        // References to the DOM elements
+        const sentenceInput = document.getElementById('sentenceInput');
+        const wordToFind = document.getElementById('wordToFind');
+        const replacementWord = document.getElementById('replacementWord');
+        const substringCheck = document.getElementById('substringCheck');
+        const resultsOutput = document.getElementById('resultsOutput');
+
+        /**
+         * Takes inputs and performs the required text operations.
+         */
+        function analyzeText() {
+            // Get inputs
+            const text = sentenceInput.value.trim();
+            const find = wordToFind.value.trim();
+            const replace = replacementWord.value.trim();
+            const check = substringCheck.value.trim();
+            
+            if (!text) {
+                resultsOutput.textContent = "Please enter text to analyze.";
+                return;
+            }
+
+            // 1. Word Counting
+            // Split by whitespace and count non-empty results
+            const count = text.split(/\s+/).filter(w => w.length > 0).length;
+
+            // 2. Word Replacement
+            let newText = text;
+            if (find && replace) {
+                // Use RegExp for global (g) and case-insensitive (i) whole word (\b) matching
+                const searchRegex = new RegExp(`\\b${find}\\b`, 'gi');
+                newText = text.replace(searchRegex, replace);
+            }
+
+            // 3. Substring Presence Check
+            const isPresent = check && text.toLowerCase().includes(check.toLowerCase());
+            const presence = check ? (isPresent ? 'PRESENT' : 'NOT PRESENT') : 'N/A';
+            
+            // Display results using a template literal
+            resultsOutput.innerHTML = `
+--- Analysis Results ---
+
+Original Sentence: 
+${text}
+
+1. Word Count: 
+${count} words
+
+2. Replacement (Find: '${find || 'N/A'}', Replace: '${replace || 'N/A'}'):
+Resulting Sentence: 
+${newText}
+
+3. Substring Check ('${check || 'N/A'}'):
+Presence: ${presence}
+`;
+        }
+    </script>
+</body>
+</html>
